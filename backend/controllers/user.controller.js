@@ -70,9 +70,19 @@ module.exports.getUserProfile = async (req, res, next) => {
 
 module.exports.logoutUser = async (req, res, next) => {
     res.clearCookie('token');
-    const token = req.cookies.token || req.headers.authorization.split(' ')[ 1 ];
+    const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
-    await blackListTokenModel.create({ token });
+    if (token) {
+        try {
+            await blackListTokenModel.findOneAndUpdate(
+                { token },
+                { token },
+                { upsert: true, setDefaultsOnInsert: true }
+            );
+        } catch (error) {
+            console.error('Logout blacklist save error:', error.message || error);
+        }
+    }
 
     res.status(200).json({ message: 'Logged out' });
 

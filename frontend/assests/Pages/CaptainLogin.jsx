@@ -1,19 +1,39 @@
 import React from 'react'
 import Layout from '../../src/components/Layout'
 import {useState} from 'react'  
-import { Link } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { CaptainDataContext } from '../../src/context/CaptainContext'
 
 function CaptainLogin() {
+
+
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-   const [Captaindata, setCaptaindata] = useState({});
+   const { setCaptain } = React.useContext(CaptainDataContext); 
+   const navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Email:', email);
-        console.log('Password:', password);
-        setCaptaindata({email : email, password: password });
+        const captainData = {
+          email : email,
+          password
+        }
+
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData);
+
+          if (response.status === 200) {
+            const data = response.data;
+            setCaptain(data.captain);
+            localStorage.setItem('token', data.token);
+            navigate('/captain-home');
+          }
+        } catch (error) {
+          console.error(error);
+          alert(error.response?.data?.message || 'Login failed');
+        }
+
         setEmail('');
         setPassword('');
       }
@@ -57,7 +77,7 @@ function CaptainLogin() {
                 </p>
               </div>
 
-              <form className="space-y-5">
+              <form className="space-y-5" onSubmit={handleSubmit}>
                 <label className="block">
                   <span className="text-sm font-medium text-slate-700">Email address</span>
                   <input

@@ -1,20 +1,65 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Layout from '../../src/components/Layout'
+import axios from 'axios'
+import { CaptainDataContext } from '../../src/context/CaptainContext'
 
 const CaptainSignup = () => {
   const [Email , setEmail] = useState('');
   const [Password , setPassword] = useState('');
   const [Firstname , setFirstname] = useState('');
   const [Lastname , setLastname] = useState('');
-  const [Userdata , setUserdata] = useState({});
+  const [VehicleColor, setVehicleColor] = useState('');
+  const [VehiclePlate, setVehiclePlate] = useState('');
+  const [VehicleCapacity, setVehicleCapacity] = useState('');
+  const [VehicleType, setVehicleType] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const submithandler = (e) => {
+  const navigate = useNavigate();
+  const { setCaptain } = React.useContext(CaptainDataContext)
+
+  const submithandler = async (e) => {
     e.preventDefault();
-    setUserdata({ Email : Email, password : Password, 
-    fullname :{ Firstname : Firstname, Lastname : Lastname } });
+
+
+    const NewCaptaindata = { 
+      email : Email, 
+      password : Password, 
+      fullname :{ firstname : Firstname, lastname : Lastname },
+      vehicle: {
+        color: VehicleColor,
+        plate: VehiclePlate,
+        capacity: VehicleCapacity,
+        vehicleType: VehicleType
+      }
+    }
     setSubmitted(true);
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, NewCaptaindata);
+      if (response.status === 201) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem('token', data.token);
+        setSubmitted(true);
+        navigate('/captain-home');
+      }
+    } catch (error) {
+      console.error(error);
+      alert(error.response?.data?.message || 'Signup failed');
+    }
+
+    setEmail('');
+    setPassword('');
+    setFirstname('');
+    setLastname('');
+    setSubmitted(false)
+    setVehicleCapacity('');
+    setVehicleColor('');
+    setVehiclePlate('');
+    setVehicleType('');
+
+
   }
  
 
@@ -117,6 +162,67 @@ const CaptainSignup = () => {
                     className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
                   />
                 </label>
+
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <h3 className="text-sm font-semibold text-slate-700">Vehicle details</h3>
+                  <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">Vehicle color</span>
+                      <input
+                        required
+                        name="vehicleColor"
+                        value={VehicleColor}
+                        onChange={(e) => setVehicleColor(e.target.value)}
+                        type="text"
+                        placeholder="Black"
+                        className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">Plate number</span>
+                      <input
+                        required
+                        name="vehiclePlate"
+                        value={VehiclePlate}
+                        onChange={(e) => setVehiclePlate(e.target.value)}
+                        type="text"
+                        placeholder="ABC-123"
+                        className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">Capacity</span>
+                      <input
+                        required
+                        name="vehicleCapacity"
+                        value={VehicleCapacity}
+                        onChange={(e) => setVehicleCapacity(e.target.value)}
+                        min="1"
+                        type="number"
+                        placeholder="4"
+                        className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-sm font-medium text-slate-700">Vehicle type</span>
+                      <select
+                        required
+                        name="vehicleType"
+                        value={VehicleType}
+                        onChange={(e) => setVehicleType(e.target.value)}
+                        className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+                      >
+                        <option value="">Select type</option>
+                        <option value="car">Car</option>
+                        <option value="motorcycle">Motorcycle</option>
+                        <option value="auto">Auto</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
 
                 <div className="flex items-center justify-between text-sm text-slate-500">
                   <label className="inline-flex items-center gap-2">

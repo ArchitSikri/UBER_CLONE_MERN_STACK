@@ -1,25 +1,40 @@
-import React, { useContext, useEffect } from 'react'
-import { UserDataContext } from '../../src/context/UserContext'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const UserProtectWrapper = ({
   children
 }) => {
    
-  const { user } = useContext(UserDataContext);
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState(() => localStorage.getItem('token'));
   const navigate = useNavigate();
 
-  useEffect( ()=>{
-      if(!token){
-        nevigate('/login')
-      }
-  } , [token] )
+  useEffect(() => {
+    const syncToken = () => {
+      setToken(localStorage.getItem('token'));
+    };
 
+    window.addEventListener('storage', syncToken);
+    window.addEventListener('focus', syncToken);
+
+    return () => {
+      window.removeEventListener('storage', syncToken);
+      window.removeEventListener('focus', syncToken);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login', { replace: true });
+    }
+  }, [token, navigate]);
+
+  if (!token) {
+    return null;
+  }
 
   return (
     <>
-      {children }
+      {children}
     </>
   )
 }

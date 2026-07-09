@@ -1,129 +1,310 @@
-import React from 'react'
-import { useState } from 'react';
-import { useRef } from 'react';
+import React, { useState, useRef } from 'react'
 import { useGSAP } from '@gsap/react'
-import gsap from 'gsap';
+import gsap from 'gsap'
 import 'remixicon/fonts/remixicon.css'
-import LocationSearchPannel from '../components/LocationSearchPannel';
+import LocationSearchPannel from '../components/LocationSearchPannel'
+import VehiclePannel from '../components/VehiclePannel'
+import ConfirmRidePannel from '../components/ConfirmRidePannel'
+import WaitingForDriverPannel from '../components/WaitingForDriverPannel'
+import LookingForDriver from '../components/LookingForDriver'
 
 const Home = () => {
 
-   const [pickup , setPickup] = useState('');
-   const [destination , setDestination] = useState('');
-   const [panelOpen , setPanelOpen] = useState(false);
-   const Panelref = useRef(null);
-   const panelCloseRef = useRef(null);
-   const panelrefarchit = useRef(null);
+  const [pickup, setPickup] = useState('')
+  const [destination, setDestination] = useState('')
+  const [panelOpen, setPanelOpen] = useState(false)
+  const [vehiclePanel, setVehiclePanel] = useState(false)
+  const [activeField, setActiveField] = useState(null)
+  const [confirmridepannel , setConfirmridepannel] = useState(false)
+  const [selectedVehicle, setSelectedVehicle] = useState(null)
+  const [waitingpannel , setWaitingpannel] = useState(false)
+  const [lookingdriverpannel , setLookingdriverpannel] = useState(false)
 
-    const submithandler = (e) => {
-        e.preventDefault()
-    };
+  const panelRef = useRef(null)
+  const closeIconRef = useRef(null)
+  const findTripBtnRef = useRef(null)
+  const vehiclePanelRef = useRef(null)
+  const confirmridepannelref = useRef(null)
+  const waitingpannelref = useRef(null)
+  const lookingdriverref = useRef(null)
 
-    useGSAP(function(){
-      if(panelOpen){
-        gsap.to(Panelref.current,{
-          height:"70%",
-          opacity : 1
 
-        })
-        gsap.to(panelCloseRef.current,{
-          opacity : 1,
-        })
-        gsap.to(panelrefarchit.current,{
-          marginTop : 0
-        })
-      }
-      else{
-        gsap.to(Panelref.current,{
-          height:"0%",
-          opacity : 0
-        }
-        )
-        gsap.to(panelCloseRef.current,{
-          opacity : 0,
-        })
-        gsap.to(panelrefarchit.current,{
-          marginTop : 80,
-        })
-      }
-    },[panelOpen])
+  
+  const submitHandler = (e) => {
+    e.preventDefault()
+  }
+
+  // Location search suggestions panel animation
+  useGSAP(() => {
+    if (panelOpen) {
+      gsap.to(panelRef.current, {
+        height: '60vh',
+        opacity: 1,
+        duration: 0.4,
+        ease: 'power2.out'
+      })
+      gsap.to(closeIconRef.current, {
+        opacity: 1,
+        duration: 0.3
+      })
+      gsap.to(findTripBtnRef.current, {
+        opacity: 1,
+        duration: 0.3,
+        delay: 0.1
+      })
+    } else {
+      gsap.to(panelRef.current, {
+        height: '0vh',
+        opacity: 0,
+        duration: 0.35,
+        ease: 'power2.in'
+      })
+      gsap.to(closeIconRef.current, {
+        opacity: 0,
+        duration: 0.2
+      })
+      gsap.to(findTripBtnRef.current, {
+        opacity: 0,
+        duration: 0.2
+      })
+    }
+  }, [panelOpen])
+
+  // Vehicle panel slide up/down animation
+  useGSAP(() => {
+    if (vehiclePanel) {
+      gsap.to(vehiclePanelRef.current, {
+        transform: 'translateY(0)',
+        duration: 0.4,
+        ease: 'power2.out'
+      })
+    } else {
+      gsap.to(vehiclePanelRef.current, {
+        transform: 'translateY(100%)',
+        duration: 0.35,
+        ease: 'power2.in'
+      })
+    }
+  }, [vehiclePanel])
+  
+  useGSAP(() => {
+    if (confirmridepannel) {
+      gsap.to(confirmridepannelref.current, {
+        transform: 'translateY(0)',
+        duration: 0.4,
+        ease: 'power2.out'
+      })
+    } else {
+      gsap.to(confirmridepannelref.current, {
+        transform: 'translateY(100%)',
+        duration: 0.35,
+        ease: 'power2.in'
+      })
+    }
+  }, [confirmridepannel])
+
+  useGSAP(() => {
+    if (!waitingpannelref.current) return
+    if (waitingpannel) {
+      gsap.to(waitingpannelref.current, {
+        transform: 'translateY(0)',
+        duration: 0.4,
+        ease: 'power2.out'
+      })
+    } else {
+      gsap.to(waitingpannelref.current, {
+        transform: 'translateY(100%)',
+        duration: 0.35,
+        ease: 'power2.in'
+      })
+    }
+  }, [waitingpannel])
+
+  useGSAP(() => {
+    if (lookingdriverpannel) {
+      gsap.to(lookingdriverref.current, {
+        transform: 'translateY(0)',
+        duration: 0.4,
+        ease: 'power2.out'
+      })
+    } else {
+      gsap.to(lookingdriverref.current, {
+        transform: 'translateY(100%)',
+        duration: 0.35,
+        ease: 'power2.in'
+      })
+    }
+  }, [lookingdriverpannel])
+
+
+
+
+   
 
   return (
-      
-  
+    <div className='h-screen relative overflow-hidden bg-gray-100'>
 
-    <div className='h-screen relative overflow-hidden '>
+      {/* Uber Logo */}
+      <img
+        className='w-16 absolute left-5 top-5 z-20'
+        src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
+        alt="uber logo"
+      />
 
-       <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
+      {/* Background Map */}
+      <div className='h-screen w-screen'>
+        <img
+          className='h-full w-full object-cover'
+          src="https://lh3.googleusercontent.com/zwH5VtNpwuiic-Er8ilFDKqI9fEDHxaMULUqcPsXsbbSwRI8oOXGIXkSDyx-Z8kRaH6-3mmEbQ1uGPe557BObJDYcbWCbdx9LD0=e365-pa-nu-s0"
+          alt="map"
+        />
+      </div>
 
-       <div className="h-screen w-screen ">
-        <img className='h-full w-full object-cover' src="https://lh3.googleusercontent.com/zwH5VtNpwuiic-Er8ilFDKqI9fEDHxaMULUqcPsXsbbSwRI8oOXGIXkSDyx-Z8kRaH6-3mmEbQ1uGPe557BObJDYcbWCbdx9LD0=e365-pa-nu-s0" alt="image" />
-       </div>
-    
-        <div className='flex flex-col justify-end absolute top-0 w-full h-screen mt-80' ref={panelrefarchit} >
+      {/* Bottom panel — always anchored to bottom */}
+      <div className='absolute bottom-0 w-full z-10'>
 
+        {/* Form Card */}
+        <div className='relative bg-white px-5 pt-6 pb-4 rounded-t-2xl shadow-2xl'>
 
-          <div className='h-[30%] p-5 bg-white relative '>
-            <button className='absolute right-6 top-6 text-2xl bg-black text-white rounded-2xl h-9 w-20 flex items-center justify-center opacity-0' onClick={()=>{setPanelOpen(false)}} ref={panelCloseRef}> BACK </button>
-            <h4 className='text-2xl font-semibold'>find a trip</h4>
-            <form action="" onSubmit={(e)=>{
-              submithandler(e)
-            }}>
-            
-            <input
-             onClick={() => {setPanelOpen(true)}}
-             value = {pickup}
-             onChange={(e)=>{setPickup(e.target.value)}}
-             className='bg-[#eee] px-8 py-2 text-lg rounded-lg w-full mt-5 ' type="text" placeholder='add a pickup loction' />
-            <input 
-            onClick={() => {setPanelOpen(true)}}
-            value = {destination}
-            onChange={(e)=>{setDestination(e.target.value)}}
-            className='bg-[#eee] px-8 py-2 text-lg rounded-lg w-full mt-5' type="text" placeholder='Enter designation' />
-            <button className='bg-black mt-3 w-85 h-10 text-white text-2xl rounded-md'>Find Trip</button>
-            </form>
-          </div>
+          {/* Close / Back icon */}
+          <button
+            ref={closeIconRef}
+            className='absolute right-5 top-5 bg-gray-100 text-gray-700 rounded-full h-10 w-10 flex items-center justify-center opacity-0 hover:bg-gray-200 transition-colors duration-200'
+            onClick={() => setPanelOpen(false)}
+          >
+            <i className="ri-arrow-down-s-line text-xl font-semibold"></i>
+          </button>
 
-          <div ref={Panelref} className='bg-white p-10 overflow-hidden'>
-              <LocationSearchPannel/>
-          </div>
+          <h4 className='text-2xl font-semibold mb-4'>Find a trip</h4>
 
+          <form onSubmit={submitHandler}>
+            {/* Vertical line connector between inputs */}
+            <div className='flex flex-col gap-3'>
+              <div className='relative'>
+                <span className='absolute left-3 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-black'></span>
+                <input
+                  required
+                  onClick={() => { setPanelOpen(true); setActiveField('pickup') }}
+                  value={pickup}
+                  onChange={(e) => { setPickup(e.target.value); setPanelOpen(true); setActiveField('pickup') }}
+                  className='bg-[#eee] pl-8 pr-4 py-3 text-sm rounded-lg w-full outline-none focus:ring-2 focus:ring-black transition-all'
+                  type="text"
+                  placeholder='Add a pickup location'
+                />
+              </div>
 
-        </div>
-
-        <div className='fixed z-10 bottom-0 bg-white w-screen p-10'>
-          <div>
-            <h3 className='text-2xl font-semibold mb-5 '>Choose a Vehicle<i className="text-3xl text-gray-900 ri-arrow-down-wide-line ml-15"></i></h3>
-          </div>
-          <div className='flex border-2 mb-2 rounded-xl w-full p-3  items-center justify-between border-gray-300 hover:border-black transition-all duration-300 ease-in-out'>
-            <img className='h-10' src="https://swyft.pl/wp-content/uploads/2023/05/how-many-people-can-a-uberx-take.jpg" alt="" />
-            <div className='ml-2 w-1/2'>
-               <h4 className='font-medium text-base'>UberGo <span><i className="ri-user-3-fill"></i>4</span></h4>
-                  <h5 className='font-medium text-sm'>2 mins away </h5>
-                  <p className='font-normal text-xs text-gray-600'>Affordable, compact rides</p>
+              <div className='relative'>
+                <span className='absolute left-3 top-1/2 -translate-y-1/2 h-2 w-2 rounded-sm bg-black'></span>
+                <input
+                  required
+                  onClick={() => { setPanelOpen(true); setActiveField('destination') }}
+                  value={destination}
+                  onChange={(e) => { setDestination(e.target.value); setPanelOpen(true); setActiveField('destination') }}
+                  className='bg-[#eee] pl-8 pr-4 py-3 text-sm rounded-lg w-full outline-none focus:ring-2 focus:ring-black transition-all'
+                  type="text"
+                  placeholder='Enter destination'
+                />
+              </div>
             </div>
-            <h2 className='text-lg font-semibold'> ₹500/- </h2>
-          </div>
-          <div className='flex border-2 mb-2 rounded-xl w-full p-3  items-center justify-between border-gray-300 hover:border-black transition-all duration-300 ease-in-out '>
-                <img className='h-15 w-15' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTv9WGELEDKLezVwavpE5UbiOX9uJ3xD3Dxu9YYr5yMUqNAwWmD_i3k5xFi&s=10" alt="image" />
-                <div className='-ml-2 w-1/2'>
-                    <h4 className='font-medium text-base'>Moto <span><i className="ri-user-3-fill"></i>1</span></h4>
-                    <h5 className='font-medium text-sm'>3 mins away </h5>
-                    <p className='font-normal text-xs text-gray-600'>Affordable motorcycle rides</p>
-                </div>
-                <h2 className='text-lg font-semibold'>₹400/- </h2>
-          </div>
-           <div className='flex border-2 mb-2 rounded-xl w-full p-3  items-center justify-between border-gray-300 hover:border-black transition-all duration-300 ease-in-out'>
-                <img className='h-15 w-17' src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=0/height=0/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy9lZGJjMWQ5ZS01OGVjLTQyODAtYWJjNS0yNDA2M2JlMGRkMTUucG5n" alt="" />
-                <div className='ml-2 w-1/2'>
-                    <h4 className='font-medium text-base'>UberAuto <span><i className="ri-user-3-fill"></i>3</span></h4>
-                    <h5 className='font-medium text-sm'>3 mins away </h5>
-                    <p className='font-normal text-xs text-gray-600'>Affordable Auto rides</p>
-                </div>
-                <h2 className='text-lg font-semibold'>₹450/-</h2>
-          </div>
 
+            {/* Find Trip button */}
+            <button
+              ref={findTripBtnRef}
+              type='button'
+              className='mt-4 w-full py-3 bg-black text-white text-sm font-bold rounded-xl flex items-center justify-between px-5 opacity-0 active:scale-95 transition-transform duration-150'
+              onClick={() => {
+                if (pickup && destination) {
+                  setVehiclePanel(true)
+                  setPanelOpen(false)
+                }
+              }}
+            >
+              <div className='flex items-center gap-2'>
+                <span className='bg-white text-black rounded-full h-7 w-7 flex items-center justify-center'>
+                  <i className="ri-map-pin-2-fill text-xs"></i>
+                </span>
+                <span>Find Trip</span>
+              </div>
+              <i className="ri-arrow-right-line text-lg"></i>
+            </button>
+          </form>
         </div>
+
+        {/* Suggestions panel — expands below form card */}
+        <div
+          ref={panelRef}
+          className='bg-white px-5 overflow-y-auto'
+          style={{ height: 0, opacity: 0 }}
+        >
+          <div className='w-full border-t border-gray-100 mb-2'></div>
+          <LocationSearchPannel
+            pickup={pickup}
+            destination={destination}
+            setPickup={setPickup}
+            setDestination={setDestination}
+            activeField={activeField}
+            setPanelOpen={setPanelOpen}
+            setActiveField={setActiveField}
+          />
+        </div>
+
+      </div>
+
+      {/* Vehicle selection panel — slides up from below screen */}
+      <div
+        ref={vehiclePanelRef}
+        className='fixed z-20 bottom-0 w-full bg-white px-4 pt-6 pb-8 rounded-t-2xl shadow-2xl'
+        style={{ transform: 'translateY(100%)' }}
+      >
+        <VehiclePannel
+          setVehiclePanel={setVehiclePanel}
+          pickup={pickup}
+          destination={destination}
+          setConfirmridepannel={setConfirmridepannel}
+          setSelectedVehicle={setSelectedVehicle}
+        />
+      </div>
+
+      <div
+        ref={confirmridepannelref}
+        className='fixed z-30 bottom-0 w-full bg-white px-4 pt-6 pb-8 rounded-t-2xl shadow-2xl'
+        style={{ transform: 'translateY(100%)' }}
+      >
+        <ConfirmRidePannel
+          pickup={pickup}
+          destination={destination}
+          setConfirmridepannel={setConfirmridepannel}
+          setVehiclePanel={setVehiclePanel}
+          selectedVehicle={selectedVehicle}
+          setLookingdriverpannel={setLookingdriverpannel}
+        />
+      </div>
+
+      <div
+        ref={lookingdriverref}
+        className='fixed z-40 bottom-0 w-full bg-white px-4 pt-6 pb-8 rounded-t-2xl shadow-2xl'
+        style={{ transform: 'translateY(100%)' }}
+      >
+        <LookingForDriver
+          pickup={pickup}
+          destination={destination}
+          selectedVehicle={selectedVehicle}
+          setLookingdriverpannel={setLookingdriverpannel}
+        />
+      </div>
+
+      <div
+        ref={waitingpannelref}
+        className='fixed z-50 bottom-0 w-full bg-white px-4 pt-6 pb-8 rounded-t-2xl shadow-2xl'
+        style={{ transform: 'translateY(100%)' }}
+      >
+        <WaitingForDriverPannel
+          pickup={pickup}
+          destination={destination}
+          selectedVehicle={selectedVehicle}
+          setWaitingpannel={setWaitingpannel}
+        />
+      </div>
 
     </div>
   )

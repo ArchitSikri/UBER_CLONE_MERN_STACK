@@ -1,8 +1,6 @@
 import React from 'react'
 
-const LocationSearchPannel = () => {
-  
-    const locations = [
+const locations = [
   "Connaught Place",
   "India Gate",
   "Rajiv Chowk Metro Station",
@@ -33,20 +31,57 @@ const LocationSearchPannel = () => {
   "Noida Sector 18",
   "Cyber City Gurgaon",
   "DLF Phase 3"
-];
+]
 
-   return (
-        <div className='overflow-y-auto max-h-full'>
-            {
-                locations.map((elem, idx) => ( 
-                    <div key={idx} className='flex gap-4 border-2 p-3 border-gray-500 active:border-black rounded-xl items-center my-2 justify-start'>
-                        <h2 className='bg-[#eee] h-8 flex items-center justify-center w-12 rounded-full'><i className="ri-map-pin-fill"></i></h2>
-                        <h4 className='font-medium'>{elem}</h4>
-                    </div>
-                ))
-            }
+const LocationSearchPannel = ({
+  pickup,
+  destination,
+  setPickup,
+  setDestination,
+  activeField,
+  setPanelOpen,
+  setActiveField
+}) => {
+
+  // Filter based on currently active field's typed value
+  const query = activeField === 'pickup' ? pickup : destination
+  const filtered = query.trim().length > 0
+    ? locations.filter(loc => loc.toLowerCase().includes(query.toLowerCase()))
+    : locations
+
+  const handleSelect = (location) => {
+    if (activeField === 'pickup') {
+      setPickup(location)
+      setActiveField('destination')
+    } else if (activeField === 'destination') {
+      setDestination(location)
+      setActiveField(null)
+      // panel open rehta hai — user Find Trip button se aage jayega
+    }
+  }
+
+  return (
+    <div className='pb-4'>
+      {filtered.length === 0 && (
+        <p className='text-gray-400 text-sm text-center py-6'>No locations found</p>
+      )}
+      {filtered.map((loc, idx) => (
+        <div
+          key={idx}
+          onClick={() => handleSelect(loc)}
+          className='flex gap-3 items-center px-2 py-3 rounded-xl hover:bg-gray-50 active:bg-gray-100 cursor-pointer transition-colors duration-150'
+        >
+          <span className='h-9 w-9 flex-shrink-0 bg-[#eee] rounded-full flex items-center justify-center text-gray-600'>
+            <i className="ri-map-pin-fill text-sm"></i>
+          </span>
+          <div>
+            <p className='text-sm font-medium text-gray-900'>{loc}</p>
+            <p className='text-xs text-gray-400'>Delhi NCR</p>
+          </div>
         </div>
-    )
+      ))}
+    </div>
+  )
 }
 
 export default LocationSearchPannel

@@ -7,6 +7,7 @@ import VehiclePannel from '../components/VehiclePannel'
 import ConfirmRidePannel from '../components/ConfirmRidePannel'
 import WaitingForDriverPannel from '../components/WaitingForDriverPannel'
 import LookingForDriver from '../components/LookingForDriver'
+import Riding from './Riding'
 
 const Home = () => {
 

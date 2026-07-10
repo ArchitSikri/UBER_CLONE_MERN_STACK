@@ -12,6 +12,8 @@ import UserLogout from '../assests/Pages/UserLogout.jsx'
 import CaptainLogout from '../assests/Pages/CaptainLogout.jsx'
 import CaptainHome from '../assests/Pages/CaptainHome.jsx'
 import CaptainProtectWrapper from '../assests/Pages/CaptainProtectWrapper.jsx'
+import Riding from '../assests/Pages/Riding.jsx'
+import CaptainRiding from '../assests/Pages/CaptainRiding.jsx'
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         </UserProtectWrapper>}/>
         <Route path='/captain-logout' element = {<CaptainLogout />}/>
         <Route path='/captain-home' element= {<CaptainProtectWrapper>   <CaptainHome/>  </CaptainProtectWrapper>}/>
+        <Route path='/user-Riding' element={ <Riding/> }/>
+        <Route path='/captain-Riding' element={ <CaptainRiding/> }/>
       </Routes>
     </div>
   )

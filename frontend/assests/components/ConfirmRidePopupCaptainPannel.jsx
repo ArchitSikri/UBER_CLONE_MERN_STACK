@@ -1,8 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const ConfirmRidePopupCaptainPannel = ({ ride, setConfirmRidePanel, setRidePopupPanel }) => {
   const navigate = useNavigate()
+  const [otp, setOtp] = useState('')
+  const [otpError, setOtpError] = useState('')
+
+  const handleConfirmRide = () => {
+    if (otp.trim().length === 0) {
+      setOtpError('Please enter OTP')
+      return
+    }
+    setOtpError('')
+    setConfirmRidePanel(false)
+    setRidePopupPanel(false)
+    navigate('/captain-Riding', { state: { ride } })
+  }
+
   return (
     <div className='px-5 py-6'>
 
@@ -82,6 +96,33 @@ const ConfirmRidePopupCaptainPannel = ({ ride, setConfirmRidePanel, setRidePopup
 
       </div>
 
+      {/* OTP Form */}
+      <div className='mb-5'>
+        <h4 className='text-sm font-semibold text-gray-700 mb-2'>
+          <i className='ri-shield-keyhole-line mr-1 text-yellow-500'></i>
+          Enter OTP from Passenger
+        </h4>
+        <div className='flex gap-2'>
+          <input
+            type='number'
+            value={otp}
+            onChange={(e) => {
+              setOtp(e.target.value)
+              setOtpError('')
+            }}
+            placeholder='Enter 6-digit OTP'
+            maxLength={6}
+            className={`flex-1 border-2 ${otpError ? 'border-red-400' : 'border-gray-300'} rounded-xl px-4 py-3 text-lg font-bold tracking-widest text-center focus:outline-none focus:border-yellow-400 transition-colors`}
+          />
+        </div>
+        {otpError && (
+          <p className='text-red-500 text-xs mt-1.5 flex items-center gap-1'>
+            <i className='ri-error-warning-line'></i>
+            {otpError}
+          </p>
+        )}
+      </div>
+
       {/* Action buttons */}
       <div className='flex gap-3'>
         <button
@@ -94,11 +135,7 @@ const ConfirmRidePopupCaptainPannel = ({ ride, setConfirmRidePanel, setRidePopup
           Go Back
         </button>
         <button
-          onClick={() => {
-            setConfirmRidePanel(false)
-            setRidePopupPanel(false)
-            navigate('/captain-Riding', { state: { ride } })
-          }}
+          onClick={handleConfirmRide}
           className='flex-1 bg-green-500 text-white py-3 rounded-xl font-semibold text-sm active:scale-95 transition-transform'
         >
           Confirm Ride

@@ -1,9 +1,9 @@
 import React from 'react'
-import Layout from '../../src/components/Layout'
+import Layout from '../components/Layout'
 import {useState} from 'react'  
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { CaptainDataContext } from '../../src/context/CaptainContext'
+import { CaptainDataContext } from '../context/CaptainContext'
 
 function CaptainLogin() {
 

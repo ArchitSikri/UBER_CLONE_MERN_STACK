@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import axios from 'axios'
-import Layout from '../../src/components/Layout'
-import { UserDataContext } from '../../src/context/UserContext'
+import Layout from '../components/Layout'
+import { UserDataContext } from '../context/UserContext'
 
 const UserSignup = () => {
   const [Email, setEmail] = useState('')

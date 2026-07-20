@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
-import Layout from '../../src/components/Layout'
+import Layout from '../components/Layout'
 import axios from 'axios'
-import { UserDataContext } from '../../src/context/UserContext'
+import { UserDataContext } from '../context/UserContext'
 
 const UserLogin = () => {
   const [email, setEmail] = useState('')

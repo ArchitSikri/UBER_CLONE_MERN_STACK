@@ -2,7 +2,7 @@ const rideService = require('../services/rides.service');
 const { validationResult } = require('express-validator');
 const mapService = require('../services/maps.services');
 const { sendMessageToSocketId } = require('../Socket');
-const rideModel = require('../models/rides.model');
+const rideModel = require('../Models/rides.model');
 
 
 
@@ -22,7 +22,7 @@ module.exports.createRide = async (req, res) => {
 
 
 
-        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 2);
+        const captainsInRadius = await mapService.getCaptainsInTheRadius(pickupCoordinates.ltd, pickupCoordinates.lng, 50);
 
         ride.otp = ""
 

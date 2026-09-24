@@ -1,4 +1,4 @@
-const rideModel = require('../models/rides.model');
+const rideModel = require('../Models/rides.model');
 const mapService = require('./maps.services');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -123,13 +123,13 @@ module.exports.startRide = async ({ rideId, otp, captain }) => {
         throw new Error('Invalid OTP');
     }
 
-    await rideModel.findOneAndUpdate({
+    const updatedRide = await rideModel.findOneAndUpdate({
         _id: rideId
     }, {
         status: 'ongoing'
-    })
+    }, { new: true }).populate('user').populate('captain');
 
-    return ride;
+    return updatedRide;
 }
 
 module.exports.endRide = async ({ rideId, captain }) => {
@@ -150,11 +150,11 @@ module.exports.endRide = async ({ rideId, captain }) => {
         throw new Error('Ride not ongoing');
     }
 
-    await rideModel.findOneAndUpdate({
+    const updatedRide = await rideModel.findOneAndUpdate({
         _id: rideId
     }, {
         status: 'completed'
-    })
+    }, { new: true }).populate('user').populate('captain');
 
-    return ride;
+    return updatedRide;
 }

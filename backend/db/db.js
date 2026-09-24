@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
 async function connectToDb() {
-    const mongoUri =
-        process.env.MONGO_URI ;
+    const mongoUri = process.env.MONGO_URL;
     try {
         await mongoose.connect(mongoUri, {
             serverSelectionTimeoutMS: 10000,

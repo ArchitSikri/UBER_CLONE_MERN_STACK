@@ -1,492 +1,184 @@
-Backend API Documentation
+# Uber Clone
 
+A full-stack ride-hailing application inspired by Uber, built with the MERN stack. The project includes separate user and captain flows, ride booking, location suggestions, fare estimation, and real-time socket-based updates.
 
+## Features
 
-/users/register Endpoint
-Description
-Registers a new user by creating a user account with the provided information.
+- User signup/login/logout
+- Captain signup/login/logout
+- Ride creation and fare estimate
+- Live map/location suggestions
+- Driver tracking and ride status flow
+- Real-time updates with Socket.IO
+- JWT-based authentication
+- Responsive UI for rider and captain perspectives
 
-HTTP Method
-POST
+## Tech Stack
 
-Request Body
-The request body should be in JSON format and include the following fields:
+### Frontend
+- React
+- Vite
+- Tailwind CSS
+- React Router DOM
+- Axios
+- GSAP
+- Socket.IO Client
 
-fullname (object):
-firstname (string, required): User's first name (minimum 3 characters).
-lastname (string, optional): User's last name (minimum 3 characters).
-email (string, required): User's email address (must be a valid email).
-password (string, required): User's password (minimum 6 characters).
-Example Response
-user (object):
-fullname (object).
-firstname (string): User's first name (minimum 3 characters).
-lastname (string): User's last name (minimum 3 characters).
-email (string): User's email address (must be a valid email).
-password (string): User's password (minimum 6 characters).
-token (String): JWT Token
-/users/login Endpoint
-Description
-Authenticates a user using their email and password, returning a JWT token upon successful login.
+### Backend
+- Node.js
+- Express.js
+- MongoDB with Mongoose
+- JWT
+- Cookie Parser
+- Socket.IO
+- Google Maps API integration
 
-HTTP Method
-POST
-
-Endpoint
-/users/login
-
-Request Body
-The request body should be in JSON format and include the following fields:
-
-email (string, required): User's email address (must be a valid email).
-password (string, required): User's password (minimum 6 characters).
-Example Response
-user (object):
-fullname (object).
-firstname (string): User's first name (minimum 3 characters).
-lastname (string): User's last name (minimum 3 characters).
-email (string): User's email address (must be a valid email).
-password (string): User's password (minimum 6 characters).
-token (String): JWT Token
-/users/profile Endpoint
-Description
-Retrieves the profile information of the currently authenticated user.
-
-HTTP Method
-GET
-
-Authentication
-Requires a valid JWT token in the Authorization header: Authorization: Bearer <token>
-
-Example Response
-user (object):
-fullname (object).
-firstname (string): User's first name (minimum 3 characters).
-lastname (string): User's last name (minimum 3 characters).
-email (string): User's email address (must be a valid email).
-/users/logout Endpoint
-Description
-Logout the current user and blacklist the token provided in cookie or headers
-
-HTTP Method
-GET
-
-Authentication
-Requires a valid JWT token in the Authorization header or cookie:
-
-user (object):
-fullname (object).
-firstname (string): User's first name (minimum 3 characters).
-lastname (string): User's last name (minimum 3 characters).
-email (string): User's email address (must be a valid email).
-password (string): User's password (minimum 6 characters).
-token (String): JWT Token## /captains/register Endpoint
-Description
-Registers a new captain by creating a captain account with the provided information.
-
-HTTP Method
-POST
-
-Request Body
-The request body should be in JSON format and include the following fields:
-
-fullname (object):
-firstname (string, required): Captain's first name (minimum 3 characters)
-lastname (string, optional): Captain's last name
-email (string, required): Captain's email address (must be a valid email)
-password (string, required): Captain's password (minimum 6 characters)
-vehicle (object):
-color (string, required): Vehicle color (minimum 3 characters)
-plate (string, required): Vehicle plate number (minimum 3 characters)
-capacity (number, required): Vehicle passenger capacity (minimum 1)
-vehicleType (string, required): Type of vehicle (must be 'car', 'motorcycle', or 'auto')
-Example Response
-/captains/register Endpoint
-Description
-Registers a new captain by creating a captain account with the provided information.
-
-HTTP Method
-POST
-
-Request Body
-The request body should be in JSON format and include the following fields:
-
-fullname (object):
-firstname (string, required): Captain's first name (minimum 3 characters).
-lastname (string, optional): Captain's last name (minimum 3 characters).
-email (string, required): Captain's email address (must be a valid email).
-password (string, required): Captain's password (minimum 6 characters).
-vehicle (object):
-color (string, required): Vehicle color (minimum 3 characters).
-plate (string, required): Vehicle plate number (minimum 3 characters).
-capacity (number, required): Vehicle passenger capacity (minimum 1).
-vehicleType (string, required): Type of vehicle (must be 'car', 'motorcycle', or 'auto').
-Example Response
-captain (object):
-fullname (object).
-firstname (string): Captain's first name (minimum 3 characters).
-lastname (string): Captain's last name (minimum 3 characters).
-email (string): Captain's email address (must be a valid email).
-password (string): Captain's password (minimum 6 characters).
-vehicle (object):
-color (string): Vehicle color.
-plate (string): Vehicle plate number.
-capacity (number): Vehicle passenger capacity.
-vehicleType (string): Type of vehicle.
-token (String): JWT Token
-/captains/login Endpoint
-Description
-Authenticates a captain using their email and password, returning a JWT token upon successful login.
-
-HTTP Method
-POST
-
-Endpoint
-/captains/login
-
-Request Body
-The request body should be in JSON format and include the following fields:
-
-email (string, required): Captain's email address (must be a valid email).
-password (string, required): Captain's password (minimum 6 characters).
-Example Response
-captain (object):
-fullname (object).
-firstname (string): Captain's first name (minimum 3 characters).
-lastname (string): Captain's last name (minimum 3 characters).
-email (string): Captain's email address (must be a valid email).
-password (string): Captain's password (minimum 6 characters).
-vehicle (object):
-color (string): Vehicle color.
-plate (string): Vehicle plate number.
-capacity (number): Vehicle passenger capacity.
-vehicleType (string): Type of vehicle.
-token (String): JWT Token
-/captains/profile Endpoint
-Description
-Retrieves the profile information of the currently authenticated captain.
-
-HTTP Method
-GET
-
-Authentication
-Requires a valid JWT token in the Authorization header: Authorization: Bearer <token>
-
-Example Response
-captain (object):
-fullname (object).
-firstname (string): Captain's first name (minimum 3 characters).
-lastname (string): Captain's last name (minimum 3 characters).
-email (string): Captain's email address (must be a valid email).
-vehicle (object):
-color (string): Vehicle color.
-plate (string): Vehicle plate number.
-capacity (number): Vehicle passenger capacity.
-vehicleType (string): Type of vehicle.
-/captains/logout Endpoint
-Description
-Logout the current captain and blacklist the token provided in cookie or headers.
-
-HTTP Method
-GET
-
-Authentication
-Requires a valid JWT token in the Authorization header or cookie.
-
-Example Response
-message (string): Logout successfully.
-/maps/get-coordinates Endpoint
-Description
-Retrieves the coordinates (latitude and longitude) for a given address.
-
-HTTP Method
-GET
-
-Request Parameters
-address (string, required): The address for which to retrieve coordinates.
-Example Request
-GET /maps/get-coordinates?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA
-
-Example Response
-{
-  "ltd": 37.4224764,
-  "lng": -122.0842499
-}
-Error Response
-400 Bad Request: If the address parameter is missing or invalid.
-404 Not Found: If the coordinates for the given address could not be found.
-{
-  "message": "Coordinates not found"
-}
-/maps/get-distance-time Endpoint
-Description
-Retrieves the distance and estimated travel time between two locations.
-
-HTTP Method
-GET
-
-Request Parameters
-origin (string, required): The starting address or location.
-destination (string, required): The destination address or location.
-Example Request
-GET /maps/get-distance-time?origin=New+York,NY&destination=Los+Angeles,CA
-Example Response
-{
-  "distance": {
-    "text": "2,789 miles",
-    "value": 4486540
-  },
-  "duration": {
-    "text": "1 day 18 hours",
-    "value": 154800
-  }
-}
-Error Response
-400 Bad Request: If the origin or destination parameter is missing or invalid.
-404 Not Found: If the distance and time for the given locations could not be found.
-{
-  "message": "No routes found"
-}
-/maps/get-suggestions Endpoint
-Description
-Retrieves autocomplete suggestions for a given input string.
-
-HTTP Method
-GET
-
-Request Parameters
-input (string, required): The input string for which to retrieve suggestions.
-Example Request
-GET /maps/get-suggestions?input=1600+Amphitheatre
-Example Response
-[
-  "1600 Amphitheatre Parkway, Mountain View, CA, USA",
-  "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA"
-]
-Error Response
-400 Bad Request: If the input parameter is missing or invalid.
-500 Internal Server Error: If there is an error retrieving suggestions.
-{
-  "message": "Unable to fetch suggestions"
-}
-/rides/create Endpoint
-Description
-Creates a new ride with the provided information.
-
-HTTP Method
-POST
-
-Authentication
-Requires a valid JWT token in the Authorization header: Authorization: Bearer <token>
-
-Request Body
-The request body should be in JSON format and include the following fields:
-
-pickup (string, required): The pickup address (minimum 3 characters).
-destination (string, required): The destination address (minimum 3 characters).
-vehicleType (string, required): The type of vehicle (must be 'auto', 'car', or 'moto').
-Example Response
-ride (object):
-user (string): User ID.
-pickup (string): Pickup address.
-destination (string): Destination address.
-fare (number): Fare amount.
-status (string): Ride status.
-duration (number): Duration in seconds.
-distance (number): Distance in meters.
-otp (string): OTP for the ride.
-Error Response
-400 Bad Request: If any required field is missing or invalid.
-500 Internal Server Error: If there is an error creating the ride.
-{
-  "message": "Error message"
-}
-/rides/get-fare Endpoint
-Description
-Retrieves the fare estimate for a ride between the provided pickup and destination addresses.
-
-HTTP Method
-GET
-
-Authentication
-Requires a valid JWT token in the Authorization header: `Authorization:
-
-Bear
-
-er `
-
-Request Parameters
-pickup (string, required): The pickup address (minimum 3 characters).
-destination (string, required): The destination address (minimum 3 characters).
-Example Request
-GET /rides/get-fare?pickup=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA
-Example Response
-{
-  "auto": 50.0,
-  "car": 75.0,
-  "moto": 40.0
-}
-Error Response
-400 Bad Request: If any required parameter is missing or invalid.
-500 Internal Server Error: If there is an error calculating the fare.
-{
-  "message": "Error message"
-}
-
-
-# 🚗 Uber Clone — Frontend
-
-A modern Uber-inspired ride-booking frontend built using **React.js** and **Tailwind CSS**. This project provides separate interfaces for users and captains/drivers, along with smooth animations and an interactive ride-booking experience.
-
-## ✨ Features
-
-* 🔐 User Login & Signup
-* 🚘 Captain/Driver Login & Signup
-* 📍 Pickup and destination selection
-* 🚕 Vehicle selection
-* 🚗 Ride confirmation
-* 👨‍✈️ Captain/Driver ride interface
-* 🗺️ Maps and location-based functionality
-* 🔄 Real-time ride updates using Socket.IO
-* 🎨 Responsive Uber-inspired UI
-* ⚡ Smooth animations using GSAP
-* 🧭 Client-side routing using React Router DOM
-
-## 🛠️ Tech Stack
-
-* **React.js**
-* **Tailwind CSS**
-* **React Router DOM**
-* **GSAP**
-* **Axios**
-* **Socket.IO Client**
-* **Remix Icons**
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
-frontend/
-│
-├── src/
-│   ├── assets/
-│   │
-│   ├── components/
-│   │   ├── LocationSearchPanel.jsx
-│   │   ├── VehiclePanel.jsx
-│   │   ├── ConfirmRidePanel.jsx
-│   │   └── ...
-│   │
-│   ├── pages/
-│   │   ├── Home.jsx
-│   │   ├── Login.jsx
-│   │   ├── Signup.jsx
-│   │   ├── CaptainHome.jsx
-│   │   ├── CaptainLogin.jsx
-│   │   └── CaptainSignup.jsx
-│   │
-│   ├── App.jsx
-│   └── main.jsx
-│
-├── public/
-├── package.json
-└── README.md
+uberclone/
+├── backend/
+│   ├── controllers/
+│   ├── db/
+│   ├── middlewares/
+│   ├── Models/
+│   ├── routes/
+│   ├── services/
+│   ├── app.js
+│   ├── server.js
+│   ├── Socket.js
+│   └── package.json
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   └── tailwind.config.js
+├── README.md
+└── package.json (if added at root later)
 ```
 
-## 🚀 Installation
+## Prerequisites
 
-Clone the repository:
+Before running the app, make sure you have:
+
+- Node.js 18+ installed
+- MongoDB running locally or a MongoDB Atlas connection string
+- A Google Maps API key
+
+## Environment Variables
+
+Create a `.env` file inside the `backend` folder with the following values:
+
+```env
+PORT=3000
+MONGO_URL=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+GOOGLE_MAPS_API=your_google_maps_api_key
+```
+
+## Installation
+
+### 1. Clone the repository
 
 ```bash
 git clone <your-repository-url>
+cd uberclone
 ```
 
-Navigate to the frontend folder:
+### 2. Install backend dependencies
 
 ```bash
-cd frontend
-```
-
-Install dependencies:
-
-```bash
+cd backend
 npm install
 ```
 
-Start the development server:
+### 3. Install frontend dependencies
 
 ```bash
+cd ../frontend
+npm install
+```
+
+## Run the App
+
+### Start the backend
+
+```bash
+cd backend
 npm run dev
 ```
 
-The application will run on:
+The backend server runs by default on:
+
+```text
+http://localhost:3000
+```
+
+### Start the frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+The frontend runs by default on:
 
 ```text
 http://localhost:5173
 ```
 
-## 🔗 Backend Connection
+## Main API Endpoints
 
-This frontend communicates with the Uber Clone backend through REST APIs.
+### User routes
+- `POST /users/register`
+- `POST /users/login`
+- `GET /users/profile`
+- `GET /users/logout`
 
-Make sure the backend server is running before using features such as:
+### Captain routes
+- `POST /captains/register`
+- `POST /captains/login`
+- `GET /captains/profile`
+- `GET /captains/logout`
 
-* User authentication
-* Captain authentication
-* Ride creation
-* Ride confirmation
-* Location services
+### Maps routes
+- `GET /maps/get-coordinates`
+- `GET /maps/get-distance-time`
+- `GET /maps/get-suggestions`
 
-Example API base URL:
+### Ride routes
+- `POST /rides/create`
+- `GET /rides/get-fare`
 
-```text
-http://localhost:5000
-```
+## User Flow
 
-## 🧑‍💻 User Flow
+1. User signs up or logs in.
+2. User enters pickup and destination.
+3. Fare is estimated and vehicle options appear.
+4. User confirms the ride request.
+5. A captain accepts the ride.
+6. Ride status is updated in real time until completion.
 
-1. User creates an account or logs in.
-2. User enters pickup location.
-3. User selects a destination.
-4. Available vehicles are displayed.
-5. User selects a vehicle.
-6. User confirms the ride.
-7. A captain accepts the ride.
-8. The ride status is updated in real time.
+## Captain Flow
 
-## 👨‍✈️ Captain Flow
+1. Captain signs up or logs in.
+2. Driver becomes active for incoming ride requests.
+3. Captain accepts a nearby ride.
+4. Captain navigates to the pickup and destination.
+5. Ride status is updated as the trip progresses.
 
-1. Captain creates an account or logs in.
-2. Captain becomes available for rides.
-3. Nearby ride requests are received.
-4. Captain accepts a ride.
-5. Captain picks up the user.
-6. Ride status is updated throughout the journey.
+## Notes
 
-## 🎨 UI & Animations
+- The backend supports both rider and captain authentication.
+- Location and map-related features rely on Google Maps APIs, with fallback values used if the API is unavailable.
+- Socket.IO enables real-time communication between the server and the frontend.
 
-The application uses:
+## License
 
-* Tailwind CSS for styling
-* GSAP for smooth panel transitions
-* Responsive layouts
-* Interactive buttons and panels
-* Mobile-first design
-
-## 📌 Future Improvements
-
-* Google Maps integration
-* Live location tracking
-* Payment gateway integration
-* Ride history
-* Ratings and reviews
-* Push notifications
-* Better driver tracking
-* Dark mode
-
-## 👨‍💻 Author
-
-Built as a full-stack MERN project to learn and practice modern web development, React, Node.js, Express.js, MongoDB, and real-time communication.
+This project is for learning and development purposes.
 
 ---
 
-⭐ If you like this project, consider giving it a star!
+Built as a full-stack MERN project for practicing authentication, APIs, real-time communication, and ride-booking workflows.

@@ -31,7 +31,8 @@ function CaptainLogin() {
           }
         } catch (error) {
           console.error(error);
-          alert(error.response?.data?.message || 'Login failed');
+          const errorMsg = error.response?.data?.message || error.response?.data?.errors?.[0]?.msg || 'Login failed';
+          alert(errorMsg);
         }
 
         setEmail('');

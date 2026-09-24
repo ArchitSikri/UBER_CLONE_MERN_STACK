@@ -46,7 +46,8 @@ const CaptainSignup = () => {
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Signup failed');
+      const errorMsg = error.response?.data?.message || error.response?.data?.errors?.[0]?.msg || 'Signup failed';
+      alert(errorMsg);
     }
 
     setEmail('');

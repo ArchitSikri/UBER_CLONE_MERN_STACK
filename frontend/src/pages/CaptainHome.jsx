@@ -4,7 +4,7 @@ import CaptainDetails from '../components/CaptainDtails'
 import RidePopUp from '../components/RidePopUp'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
-import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
+import ConfirmRidePopUp from '../components/ConfirmRidePopup'
 import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CaptainContext'
 import axios from 'axios'
@@ -12,13 +12,13 @@ import LiveTracking from '../components/LiveTracking'
 
 const CaptainHome = () => {
 
-    const [ ridePopupPanel, setRidePopupPanel ] = useState(false)
-    const [ confirmRidePopupPanel, setConfirmRidePopupPanel ] = useState(false)
-    const [ confirmError, setConfirmError ] = useState('')
+    const [ridePopupPanel, setRidePopupPanel] = useState(false)
+    const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
+    const [confirmError, setConfirmError] = useState('')
 
     const ridePopupPanelRef = useRef(null)
     const confirmRidePopupPanelRef = useRef(null)
-    const [ ride, setRide ] = useState(null)
+    const [ride, setRide] = useState(null)
 
     const { socket } = useContext(SocketContext)
     const { captain } = useContext(CaptainDataContext)
@@ -51,7 +51,7 @@ const CaptainHome = () => {
         updateLocation()
 
         return () => clearInterval(locationInterval)
-    }, [ captain?._id, socket ])
+    }, [captain?._id, socket])
 
     useEffect(() => {
         if (!socket) return undefined
@@ -65,7 +65,7 @@ const CaptainHome = () => {
 
         socket.on('new-ride', handleNewRide)
         return () => socket.off('new-ride', handleNewRide)
-    }, [ socket ])
+    }, [socket])
 
     async function confirmRide() {
         if (!ride?._id) return false
@@ -101,7 +101,7 @@ const CaptainHome = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ ridePopupPanel ])
+    }, [ridePopupPanel])
 
     useGSAP(function () {
         if (confirmRidePopupPanel) {
@@ -113,7 +113,7 @@ const CaptainHome = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ confirmRidePopupPanel ])
+    }, [confirmRidePopupPanel])
 
     return (
         <div className='relative h-dvh overflow-hidden bg-slate-100'>
